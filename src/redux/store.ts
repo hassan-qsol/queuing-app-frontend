@@ -1,14 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loginReducer from "./login/loginSlice";
 import { Users } from "@/api/userApi";
+import { Company } from "@/api/companyApi";
 
 export const store = configureStore({
 	reducer: {
 		login: loginReducer,
 		[Users.reducerPath]: Users.reducer,
+		[Company.reducerPath]: Company.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware({ serializableCheck: false }).concat(Users.middleware),
+		getDefaultMiddleware({ serializableCheck: false }).concat(
+			Users.middleware,
+			Company.middleware
+		),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

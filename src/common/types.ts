@@ -79,12 +79,27 @@ export interface IFindManagersResponse extends ResponseObject {
 
 export interface ICreateCompanyRequest {
 	companyName: string;
-	companyManager: string;
+	companyManager: number;
 	lat: number;
 	lng: number;
-	createdBy: number;
 }
 
 export interface ICreateCompanyResponse extends ResponseObject {
 	response: string;
+}
+
+export interface IFindCompanies {
+	id: number;
+	company_name: string;
+	company_manager: number;
+	lat: number;
+	lng: number;
+	is_deleted: boolean;
+	is_active: boolean;
+	created_at: Date;
+	created_by: number;
+}
+
+export interface IFindCompaniesResponse extends ResponseObject {
+	response: Array<IFindCompanies>;
 }
