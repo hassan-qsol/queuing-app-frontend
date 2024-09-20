@@ -11,6 +11,7 @@ import NotFound from "./pages/notFound";
 import AdminLayout from "./components/layout/admin";
 import CustomerLayout from "./components/layout/customer";
 import ManagerLayout from "./components/layout/manager";
+import CompanyForm from "./pages/admin/company";
 
 // import { TanStackRouterDevelopmentTools } from "./components/utils/development-tools/TanStackRouterDevelopmentTools";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -30,7 +31,7 @@ const App = (): FunctionComponent => {
 								<Route index element={<Counter />} path="/" />
 							</Route>
 							<Route element={<AdminLayout />} path="/admin">
-								<Route element={<Counter />} path="/admin" />
+								<Route element={<CompanyForm />} path="/admin/company" />
 							</Route>
 							<Route element={<ManagerLayout />} path="/manager">
 								<Route element={<Counter />} path="/manager" />

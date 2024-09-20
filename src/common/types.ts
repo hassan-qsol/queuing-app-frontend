@@ -31,6 +31,7 @@ export interface IFetchError {
 }
 
 // --- API
+
 export interface ResponseObject {
 	statusCode: number;
 	response: unknown;
@@ -43,6 +44,8 @@ export enum EUserType {
 	MANAGER = "MANAGER",
 	CUSTOMER = "CUSTOMER",
 }
+
+// --- USER
 
 export interface ILoginState {
 	id: number;
@@ -61,4 +64,27 @@ export interface ILoginInput {
 
 export interface ILoginStateResponse extends ResponseObject {
 	response: ILoginState;
+}
+
+export interface IFindManager {
+	id: string;
+	name: string;
+}
+
+export interface IFindManagersResponse extends ResponseObject {
+	response: Array<IFindManager>;
+}
+
+// --- COMPANY
+
+export interface ICreateCompanyRequest {
+	companyName: string;
+	companyManager: string;
+	lat: number;
+	lng: number;
+	createdBy: number;
+}
+
+export interface ICreateCompanyResponse extends ResponseObject {
+	response: string;
 }

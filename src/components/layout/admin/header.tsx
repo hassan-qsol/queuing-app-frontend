@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 
-const headerRouter = [{ route: "/admin/settings", title: "Settings" }];
+const headerRouter = [{ route: "/admin/company", title: "Company" }];
 const AdminHeader = () => {
 	return (
 		<header className="bg-white shadow-md py-4 px-6 flex items-center justify-between">

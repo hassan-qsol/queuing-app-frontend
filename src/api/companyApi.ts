@@ -1,40 +1,33 @@
-// userApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "@/redux/store";
-import type {
-	IFindManagersResponse,
-	ILoginInput,
-	ILoginStateResponse,
-} from "@/common/types"; // Import setUser action
+import type { ILoginInput, ILoginStateResponse } from "@/common/types";
 
 const { VITE_API_URL } = import.meta.env;
 
-export const Users = createApi({
-	reducerPath: "api/users",
+export const Company = createApi({
+	reducerPath: "api/company",
 	baseQuery: fetchBaseQuery({
-		baseUrl: VITE_API_URL + "/users",
+		baseUrl: VITE_API_URL + "/company",
 		prepareHeaders: (headers, { getState }) => {
 			const token: string = (getState() as RootState).login.value.accessToken;
 			if (token) headers.set("Authorization", `Bearer ${token}`);
 			return headers;
 		},
 	}),
-	tagTypes: ["users"],
+	tagTypes: ["company"],
 	endpoints(builder) {
 		return {
 			// Login mutation
-			setLogin: builder.mutation<ILoginStateResponse, ILoginInput>({
+			createCompany: builder.mutation<ILoginStateResponse, ILoginInput>({
 				query: (payload) => ({
-					url: "/login",
+					url: "/",
 					method: "POST",
 					body: payload,
 				}),
 			}),
-			findManagers: builder.query<IFindManagersResponse, void>({
-				query: () => `/`,
-			}),
+			
 		};
 	},
 });
 
-export const { useSetLoginMutation, useFindManagersQuery } = Users;
+export const { useCreateCompanyMutation } = Company;
