@@ -1,7 +1,19 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardHeader,
+	CardTitle,
+	CardContent,
+	CardFooter,
+} from "@/components/ui/card";
+import {
+	Select,
+	SelectTrigger,
+	SelectContent,
+	SelectItem,
+	SelectValue,
+} from "@/components/ui/select";
 import {
 	Form,
 	FormItem,
@@ -10,55 +22,44 @@ import {
 	FormField,
 	FormControl,
 } from "@/components/ui/form";
-import { useParams } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils"; // assuming you have a utility for Tailwind CSS
-import { type ServiceFormData, ServiceSchema } from "./serviceSchema";
-import { useEffect, useState } from "react";
+import { type TicketFormData, TicketSchema } from "./ticketSchema";
+import { useEffect, useState, useMemo } from "react";
 import Loader from "@/components/ui/loader";
-import { errorMessageHandling } from "@/common/helpers";
-import { useCreateServiceMutation } from "@/api/serviceApi";
+import { useFindCollectorsQuery } from "@/api/userApi";
+import { Button } from "@/components/ui/button";
 
-const ServiceDetails = () => {
-	const { toast } = useToast();
-	const { companyId } = useParams();
-
+const ServicesForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	// API ---
-	const [createServiceMutation, { isLoading: isLoadingCreateService }] =
-		useCreateServiceMutation();
+	const { currentData: findCollectorsData, isFetching } =
+		useFindCollectorsQuery(
+			undefined, // No query parameters
+			{
+				refetchOnMountOrArgChange: true, // Options for the query
+			}
+		);
+	const collectors = useMemo(() => {
+		return findCollectorsData?.response?.length
+			? findCollectorsData.response
+			: [];
+	}, [findCollectorsData?.response]);
 
 	useEffect(() => {
-		if (isLoadingCreateService) {
+		if (isFetching) {
 			setIsLoading(true);
 		} else setIsLoading(false);
-	}, [isLoadingCreateService]);
+	}, [isFetching]);
 
-	const form = useForm<ServiceFormData>({
-		resolver: zodResolver(ServiceSchema),
+	const form = useForm<TicketFormData>({
+		resolver: zodResolver(TicketSchema),
 		defaultValues: {
-			serviceName: "",
-			serviceDescription: "",
+			collectorName: "",
 		},
 	});
 
-	const onSubmit = async (values: ServiceFormData) => {
-		await createServiceMutation({ ...values, companyId: Number(companyId) })
-			.unwrap()
-			.then((resp) => {
-				toast({
-					title: "Success",
-					description: resp.response,
-				});
-			})
-			.catch((e: any) => {
-				toast({
-					variant: "destructive",
-					title: "Operation Failed",
-					description: errorMessageHandling(e),
-				});
-			});
+	const onSubmit = (values: TicketFormData) => {
+		console.log(values);
 	};
 
 	return (
@@ -69,66 +70,50 @@ const ServiceDetails = () => {
 				<div className="space-y-4 p-6 bg-white rounded shadow-md">
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)}>
-							<h2 className="text-lg font-semibold mb-4">Add Service</h2>
-
+							<Card className="w-80 mb-5">
+								<CardHeader>
+									<CardTitle className="text-center">Ticket Number</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<p className="text-center text-2xl font-semibold">12345</p>
+								</CardContent>
+								<CardFooter className="flex justify-center">
+									<Button>Get Ticket</Button>
+								</CardFooter>
+							</Card>
 							{/* Company Name */}
 							<FormField
 								control={form.control}
-								name="serviceName"
+								name="collectorName"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel htmlFor="serviceName">Service Name</FormLabel>
+										<FormLabel htmlFor="collectorName">Collector</FormLabel>
 										<FormControl>
-											<Input
-												id="serviceName"
-												{...field}
-												className={cn(
-													form.formState.errors.serviceName && "border-red-500"
-												)}
-											/>
+											<Select
+												defaultValue=""
+												value={field.value} // set the value from form state
+												onValueChange={field.onChange} // handle change
+											>
+												<SelectTrigger>
+													<SelectValue placeholder="Select a manager" />
+												</SelectTrigger>
+												<SelectContent>
+													{collectors.map((manager) => (
+														<SelectItem key={manager.id} value={manager.id}>
+															{manager.name}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
 										</FormControl>
-										{form.formState.errors.serviceName && (
+										{form.formState.errors.collectorName && (
 											<FormMessage>
-												{form.formState.errors.serviceName?.message}
+												{form.formState.errors.collectorName?.message}
 											</FormMessage>
 										)}
 									</FormItem>
 								)}
 							/>
-							<FormField
-								control={form.control}
-								name="serviceDescription"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel htmlFor="serviceDescription">
-											Service Description
-										</FormLabel>
-										<FormControl>
-											<Input
-												id="serviceDescription"
-												{...field}
-												className={cn(
-													form.formState.errors.serviceDescription &&
-														"border-red-500"
-												)}
-											/>
-										</FormControl>
-										{form.formState.errors.serviceDescription && (
-											<FormMessage>
-												{form.formState.errors.serviceDescription?.message}
-											</FormMessage>
-										)}
-									</FormItem>
-								)}
-							/>
-
-							{/* Submit Button */}
-							<Button
-								className="mt-5 w-max bg-blue-500 text-white"
-								type="submit"
-							>
-								Add Service
-							</Button>
 						</form>
 					</Form>
 				</div>
@@ -137,4 +122,4 @@ const ServiceDetails = () => {
 	);
 };
 
-export default ServiceDetails;
+export default ServicesForm;

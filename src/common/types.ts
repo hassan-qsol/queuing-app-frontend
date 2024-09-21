@@ -66,13 +66,17 @@ export interface ILoginStateResponse extends ResponseObject {
 	response: ILoginState;
 }
 
-export interface IFindManager {
+export interface IFind {
 	id: string;
 	name: string;
 }
 
 export interface IFindManagersResponse extends ResponseObject {
-	response: Array<IFindManager>;
+	response: Array<IFind>;
+}
+
+export interface IFindCollectorsResponse extends ResponseObject {
+	response: Array<IFind>;
 }
 
 // --- COMPANY

@@ -15,6 +15,7 @@ import CompanyForm from "./pages/admin/company";
 import CompaniesList from "./pages/admin/company/companiesList";
 import ServicesList from "./pages/admin/service";
 import ServicesForm from "./pages/admin/service/form";
+import ServiceDetail from "./pages/admin/service/detail";
 
 // import { TanStackRouterDevelopmentTools } from "./components/utils/development-tools/TanStackRouterDevelopmentTools";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -33,7 +34,7 @@ const App = (): FunctionComponent => {
 							<Route element={<CustomerLayout />} path="/">
 								<Route index element={<CompaniesList />} path="/" />
 								<Route element={<ServicesList />} path="/company/:companyId/services" />
-								<Route element={<ServicesList />} path="/company/:companyId/services/:serviceId" />
+								<Route element={<ServiceDetail />} path="/company/:companyId/services/:serviceId" />
 							</Route>
 							<Route element={<AdminLayout />} path="/admin">
 								<Route element={<CompanyForm />} path="/admin" />

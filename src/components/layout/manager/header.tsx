@@ -1,3 +1,4 @@
+import { handleLogout } from "@/common/helpers";
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
@@ -11,7 +12,6 @@ const ManagerHeader = () => {
 	return (
 		<header className="bg-white shadow-md py-4 px-6 flex items-center justify-between">
 			<div className="flex items-center space-x-4">
-				
 				<Link className="text-2xl font-bold text-gray-800" to="/admin">
 					Manager
 				</Link>
@@ -38,7 +38,8 @@ const ManagerHeader = () => {
 							<i className="fas fa-user mr-2" /> <span>Profile</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem className="flex items-center space-x-2 p-2 hover:bg-gray-100">
-							<i className="fas fa-sign-out-alt mr-2" /> <span>Logout</span>
+							<i className="fas fa-sign-out-alt mr-2" onClick={handleLogout} />{" "}
+							<span>Logout</span>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

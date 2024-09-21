@@ -1,5 +1,10 @@
 import type { IErrorResponse, IFetchError } from "./types";
 
+export const handleLogout = () => {
+	localStorage.removeItem("app-login-session");
+	window.location.href = `/`;
+};
+
 export const errorMessageHandling = (
 	payload: IFetchError | IErrorResponse
 ): string => {
@@ -22,7 +27,7 @@ export const getCurrentLatitudeLongitude = async (): Promise<{
 				resolve(coordinates);
 			},
 			(err) => {
-				console.error(err)
+				console.error(err);
 				reject(new Error("Geolocation is not available or permission denied."));
 			}
 		);
