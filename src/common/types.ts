@@ -90,16 +90,46 @@ export interface ICreateCompanyResponse extends ResponseObject {
 
 export interface IFindCompanies {
 	id: number;
-	company_name: string;
-	company_manager: number;
+	companyName: string;
+	companyManager: number;
+	weekdays: Array<string>;
 	lat: number;
 	lng: number;
-	is_deleted: boolean;
-	is_active: boolean;
-	created_at: Date;
-	created_by: number;
+	operating_days: Array<{
+		id: number;
+		weekday_id: number;
+		weekday: {
+			day_name: string;
+		};
+	}>;
 }
 
 export interface IFindCompaniesResponse extends ResponseObject {
 	response: Array<IFindCompanies>;
+}
+
+// --- SERVICE
+
+export interface ICreateServiceRequest {
+	serviceName: string;
+	serviceDescription: string;
+	companyId: number;
+}
+
+export interface ICreateServiceResponse extends ResponseObject {
+	response: string;
+}
+
+export interface IFindServicesRequest {
+	companyId: number;
+}
+
+export interface IFindServices {
+	id: number;
+	name: string;
+	description: string;
+}
+
+export interface IFindServicesResponse extends ResponseObject {
+	response: Array<IFindServices>;
 }

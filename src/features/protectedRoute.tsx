@@ -12,7 +12,11 @@ const ProtectedRoute = () => {
 	const location = useLocation();
 
 	// Redirect to login if not authenticated and trying to access a protected route
-	if (!isAuthenticated && location.pathname !== "/login") {
+	if (
+		!isAuthenticated &&
+		(location.pathname.startsWith("/admin") ||
+			location.pathname.startsWith("/manager"))
+	) {
 		return <Navigate to="/login" />;
 	}
 

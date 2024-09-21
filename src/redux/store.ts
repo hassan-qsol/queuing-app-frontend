@@ -2,17 +2,20 @@ import { configureStore } from "@reduxjs/toolkit";
 import loginReducer from "./login/loginSlice";
 import { Users } from "@/api/userApi";
 import { Company } from "@/api/companyApi";
+import { Service } from "@/api/serviceApi";
 
 export const store = configureStore({
 	reducer: {
 		login: loginReducer,
 		[Users.reducerPath]: Users.reducer,
 		[Company.reducerPath]: Company.reducer,
+		[Service.reducerPath]: Service.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({ serializableCheck: false }).concat(
 			Users.middleware,
-			Company.middleware
+			Company.middleware,
+			Service.middleware
 		),
 });
 

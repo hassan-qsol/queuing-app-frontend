@@ -6,10 +6,11 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
 	Form,
 	FormItem,
-	FormControl,
 	FormLabel,
 	FormMessage,
 	FormField,
+	FormDescription,
+	FormControl,
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -29,6 +30,38 @@ import {
 	getCurrentLatitudeLongitude,
 } from "@/common/helpers";
 import { useCreateCompanyMutation } from "@/api/companyApi";
+import { Checkbox } from "@/components/ui/checkbox";
+
+const weekdays = [
+	{
+		id: "1",
+		label: "Monday",
+	},
+	{
+		id: "2",
+		label: "Tuesday",
+	},
+	{
+		id: "3",
+		label: "Wednesday",
+	},
+	{
+		id: "4",
+		label: "Thursday",
+	},
+	{
+		id: "5",
+		label: "Friday",
+	},
+	{
+		id: "6",
+		label: "Saturday",
+	},
+	{
+		id: "7",
+		label: "Sunday",
+	},
+] as const;
 
 const CompanyForm = () => {
 	const { toast } = useToast();
@@ -75,10 +108,12 @@ const CompanyForm = () => {
 		resolver: zodResolver(CompanySchema),
 		defaultValues: {
 			companyName: "",
+			weekdays: ["1", "2", "3", "4", "5", "6", "7"],
 		},
 	});
 
 	const onSubmit = async (values: CompanyFormData) => {
+		
 		const payload = {
 			...values,
 			companyManager: Number(values.companyManager),
@@ -188,6 +223,61 @@ const CompanyForm = () => {
 												{form.formState.errors.companyManager?.message}
 											</FormMessage>
 										)}
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="weekdays"
+								render={() => (
+									<FormItem>
+										<div className="mb-4 mt-5">
+											<FormLabel className="text-base">Weekdays</FormLabel>
+											<FormDescription>
+												Select weekdays on which company will operate.
+											</FormDescription>
+										</div>
+										{/* Container to hold weekdays in a row */}
+										<div className="flex flex-wrap gap-4">
+											{weekdays.map((day) => (
+												<FormField
+													key={day.id}
+													control={form.control}
+													name="weekdays"
+													render={({ field }) => {
+														return (
+															<FormItem
+																key={day.id}
+																className="flex flex-row items-center space-x-2 border rounded bg-blue-500 p-2"
+															>
+																<FormControl>
+																	<Checkbox
+																		checked={field.value?.includes(day.id)}
+																		className="mt-0"
+																		onCheckedChange={(checked) => {
+																			return checked
+																				? field.onChange([
+																						...field.value,
+																						day.id,
+																					])
+																				: field.onChange(
+																						field.value?.filter(
+																							(value) => value !== day.id
+																						)
+																					);
+																		}}
+																	/>
+																</FormControl>
+																<FormLabel className="text-sm text-white">
+																	{day.label}
+																</FormLabel>
+															</FormItem>
+														);
+													}}
+												/>
+											))}
+										</div>
+										<FormMessage />
 									</FormItem>
 								)}
 							/>
