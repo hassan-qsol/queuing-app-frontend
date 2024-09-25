@@ -12,10 +12,7 @@ const ProtectedRoute = () => {
 	const location = useLocation();
 
 	// Redirect to login if not authenticated and trying to access a protected route
-	if (
-		!isAuthenticated &&
-		 location.pathname !== "/login"
-	) {
+	if (!isAuthenticated && location.pathname !== "/login") {
 		return <Navigate to="/login" />;
 	}
 
@@ -26,6 +23,45 @@ const ProtectedRoute = () => {
 		else if (loginValue.userType === EUserType.MANAGER)
 			return <Navigate to="/manager" />;
 		else return <Navigate to="/" />;
+	}
+
+	if (isAuthenticated && location.pathname === "/") {
+		if (
+			loginValue.userType !== EUserType.CUSTOMER &&
+			loginValue.userType === EUserType.ADMIN
+		)
+			return <Navigate to="/admin" />;
+		else if (
+			loginValue.userType !== EUserType.CUSTOMER &&
+			loginValue.userType === EUserType.MANAGER
+		)
+			return <Navigate to="/manager" />;
+	}
+
+	if (isAuthenticated && location.pathname.startsWith("/admin")) {
+		if (
+			loginValue.userType !== EUserType.ADMIN &&
+			loginValue.userType === EUserType.CUSTOMER
+		)
+			return <Navigate to="/" />;
+		else if (
+			loginValue.userType !== EUserType.ADMIN &&
+			loginValue.userType === EUserType.MANAGER
+		)
+			return <Navigate to="/manager" />;
+	}
+
+	if (isAuthenticated && location.pathname.startsWith("/manager")) {
+		if (
+			loginValue.userType !== EUserType.MANAGER &&
+			loginValue.userType === EUserType.CUSTOMER
+		)
+			return <Navigate to="/" />;
+		else if (
+			loginValue.userType !== EUserType.MANAGER &&
+			loginValue.userType === EUserType.ADMIN
+		)
+			return <Navigate to="/admin" />;
 	}
 
 	return <Outlet />;
