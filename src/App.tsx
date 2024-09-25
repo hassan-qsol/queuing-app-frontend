@@ -55,7 +55,7 @@ const App = (): FunctionComponent => {
 									path="/admin/company/:companyId/services"
 								/>
 								<Route
-									element={<ServicesList />}
+									element={<QueueList />}
 									path="/admin/company/:companyId/services/:serviceId"
 								/>
 							</Route>

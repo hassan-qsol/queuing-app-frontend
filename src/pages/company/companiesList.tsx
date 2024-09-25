@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { EUserType } from "@/common/types";
+import { Button } from "@/components/ui/button";
 
 const CompaniesList = () => {
 	const { value: loginValue } = useAppSelector(
@@ -49,13 +50,7 @@ const CompaniesList = () => {
 			) : (
 				<div className="flex flex-wrap gap-4 justify-start">
 					{findCompaniesData?.response?.map((company) => (
-						<Card
-							key={company.id}
-							className="w-max"
-							onClick={() => {
-								handleNavigate(company.id);
-							}}
-						>
+						<Card key={company.id} className="w-max p-2">
 							<CardHeader>
 								<CardTitle>Company Name</CardTitle>
 								<CardDescription>{company.companyName}</CardDescription>
@@ -68,6 +63,26 @@ const CompaniesList = () => {
 									</CardDescription>
 								))}
 							</CardContent>
+							<div className="flex justify-evenly capitalize m-x-5 gap-2">
+								<Button
+									className={`flex items-center justify-center`}
+									onClick={() => {
+										handleNavigate(company.id);
+									}}
+								>
+									view services
+								</Button>
+								{loginValue.userType !== EUserType.CUSTOMER && (
+									<Button
+										className={`flex items-center justify-center `}
+										onClick={() => {
+											navigate(`/admin/company/${company.id}/services/add`);
+										}}
+									>
+										add service
+									</Button>
+								)}
+							</div>
 						</Card>
 					))}
 				</div>

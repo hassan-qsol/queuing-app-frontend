@@ -29,34 +29,26 @@ const CollectorLogin: React.FC = () => {
 
 	// Handle form submission
 	const onSubmit = async (values: CollectorSchema): Promise<void> => {
-		try {
-			await setCollectorLogin(values)
-				.unwrap()
-				.then((resp) => {
-					if (resp?.response?.accessToken) {
-						console.log(resp.response);
-						dispatch(login(resp.response));
-						window.location.href = `/`;
-					} else
-						toast({
-							variant: "destructive",
-							title: "Unable to find Access Token",
-						});
-				})
-				.catch((e: any) => {
+		await setCollectorLogin(values)
+			.unwrap()
+			.then((resp) => {
+				if (resp?.response?.accessToken) {
+					console.log(resp.response);
+					dispatch(login(resp.response));
+					window.location.href = `/`;
+				} else
 					toast({
 						variant: "destructive",
-						title: "Login failed",
-						description: errorMessageHandling(e),
+						title: "Unable to find Access Token",
 					});
+			})
+			.catch((e: any) => {
+				toast({
+					variant: "destructive",
+					title: "Login failed",
+					description: errorMessageHandling(e),
 				});
-		} catch (ex: any) {
-			toast({
-				variant: "destructive",
-				title: "Login failed",
-				description: ex?.message,
 			});
-		}
 	};
 
 	return (
