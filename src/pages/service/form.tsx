@@ -30,9 +30,8 @@ const ServicesForm = () => {
 		useCreateServiceMutation();
 
 	useEffect(() => {
-		if (isLoadingCreateService) {
-			setIsLoading(true);
-		} else setIsLoading(false);
+		if (isLoadingCreateService) setIsLoading(true);
+		else setIsLoading(false);
 	}, [isLoadingCreateService]);
 
 	const form = useForm<ServiceFormData>({

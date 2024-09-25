@@ -50,7 +50,10 @@ const CompaniesList = () => {
 			) : (
 				<div className="flex flex-wrap gap-4 justify-start">
 					{findCompaniesData?.response?.map((company) => (
-						<Card key={company.id} className="w-max p-2">
+						<Card
+							key={company.id}
+							className={`w-max p-2 ${!company.isOpen ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
+						>
 							<CardHeader>
 								<CardTitle>Company Name</CardTitle>
 								<CardDescription>{company.companyName}</CardDescription>
@@ -63,7 +66,7 @@ const CompaniesList = () => {
 									</CardDescription>
 								))}
 							</CardContent>
-							<div className="flex justify-evenly capitalize m-x-5 gap-2">
+							<div className="flex justify-evenly capitalize mx-5 gap-2">
 								<Button
 									className={`flex items-center justify-center`}
 									onClick={() => {

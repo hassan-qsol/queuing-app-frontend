@@ -23,7 +23,7 @@ import {
 import { cn } from "@/lib/utils"; // assuming you have a utility for Tailwind CSS
 import { type CompanyFormData, CompanySchema } from "./companySchema";
 import { useFindManagersQuery } from "@/api/userApi";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "@/components/ui/loader";
 import {
 	errorMessageHandling,
@@ -75,15 +75,12 @@ const CompanyForm = () => {
 	// API ---
 	const [createCompanyMutation, { isLoading: isLoadingCreateCompany }] =
 		useCreateCompanyMutation();
-	const { currentData: findManagersData, isFetching } = useFindManagersQuery(
+	const { currentData: managerOptions, isFetching } = useFindManagersQuery(
 		undefined, // No query parameters
 		{
 			refetchOnMountOrArgChange: true, // Options for the query
 		}
 	);
-	const managerOptions = useMemo(() => {
-		return findManagersData?.response?.length ? findManagersData.response : [];
-	}, [findManagersData?.response]);
 
 	useEffect(() => {
 		const fetchCoordinates = async () => {
@@ -209,7 +206,7 @@ const CompanyForm = () => {
 													<SelectValue placeholder="Select a manager" />
 												</SelectTrigger>
 												<SelectContent>
-													{managerOptions.map((manager) => (
+													{managerOptions?.response?.map((manager) => (
 														<SelectItem key={manager.id} value={manager.id}>
 															{manager.name}
 														</SelectItem>

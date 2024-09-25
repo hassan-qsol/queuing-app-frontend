@@ -112,6 +112,7 @@ export interface IFindCompanies {
 	weekdays: Array<string>;
 	lat: number;
 	lng: number;
+	isOpen: boolean;
 	operating_days: Array<{
 		id: number;
 		weekday_id: number;
