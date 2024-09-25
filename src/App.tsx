@@ -14,7 +14,7 @@ import CompaniesList from "./pages/company/companiesList";
 import ServicesList from "./pages/service";
 import ServicesForm from "./pages/service/form";
 import ServiceDetail from "./pages/service/detail";
-import RadioButtonComponent from "./pages/Login";
+import RadioButtonComponent from "./pages/login";
 import Manager from "./pages/manager/services";
 import QueueList from "./pages/manager/services/queue";
 

@@ -93,7 +93,7 @@ const UserLogin: React.FC = () => {
 			</div>
 
 			{/* Submit Button */}
-			<div>
+			<div className="text-center">
 				<Button disabled={isLoading} type="submit">
 					Sign in
 				</Button>
