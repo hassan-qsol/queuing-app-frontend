@@ -1,8 +1,7 @@
 import GeoDistanceCalculator from "@/components/utils/GeoDistanceCalculator";
 import type { FunctionComponent } from "../common/types";
 
-// const environment = import.meta.env["VITE_APP_TITLE"];
-export const Counter = (): FunctionComponent => {
+export const GeoLocation = (): FunctionComponent => {
 	return (
 		<div>
 			{/* {environment} */}
