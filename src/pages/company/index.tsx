@@ -112,8 +112,7 @@ const CompanyForm = () => {
 		},
 	});
 
-	const onSubmit = async (values: CompanyFormData) => {
-		
+	const onSubmit = (values: CompanyFormData) => {
 		const payload = {
 			...values,
 			companyManager: Number(values.companyManager),
@@ -121,7 +120,7 @@ const CompanyForm = () => {
 			lng: coordinates?.lng || 0,
 		};
 
-		await createCompanyMutation(payload)
+		createCompanyMutation(payload)
 			.unwrap()
 			.then((resp) => {
 				toast({

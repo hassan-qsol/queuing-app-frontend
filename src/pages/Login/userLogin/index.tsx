@@ -28,8 +28,8 @@ const UserLogin: React.FC = () => {
 	const [setUserLogin, { isLoading }] = useSetLoginMutation();
 
 	// Handle form submission
-	const onSubmit = async (values: LoginSchema): Promise<void> => {
-		await setUserLogin(values)
+	const onSubmit = (values: LoginSchema): void => {
+		setUserLogin(values)
 			.unwrap()
 			.then((resp) => {
 				if (resp?.response?.accessToken) {

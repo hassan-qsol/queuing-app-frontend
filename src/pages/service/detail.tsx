@@ -36,9 +36,9 @@ const ServicesForm = () => {
 		} else setIsLoading(false);
 	}, [isLoadingGenerateTicket]);
 
-	const generateTicket = async () => {
+	const generateTicket = () => {
 		if (loginValue.userType === EUserType.CUSTOMER) {
-			await generateTicketMutation({
+			generateTicketMutation({
 				collectorId: loginValue.id,
 				serviceId: Number(serviceId),
 			})

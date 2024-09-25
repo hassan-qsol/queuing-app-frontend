@@ -43,8 +43,8 @@ const ServicesForm = () => {
 		},
 	});
 
-	const onSubmit = async (values: ServiceFormData) => {
-		await createServiceMutation({ ...values, companyId: Number(companyId) })
+	const onSubmit = (values: ServiceFormData) => {
+		createServiceMutation({ ...values, companyId: Number(companyId) })
 			.unwrap()
 			.then((resp) => {
 				toast({

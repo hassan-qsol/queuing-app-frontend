@@ -28,8 +28,8 @@ const CollectorLogin: React.FC = () => {
 	const [setCollectorLogin, { isLoading }] = useSetLoginCollectorMutation();
 
 	// Handle form submission
-	const onSubmit = async (values: CollectorSchema): Promise<void> => {
-		await setCollectorLogin(values)
+	const onSubmit = (values: CollectorSchema): void => {
+		setCollectorLogin(values)
 			.unwrap()
 			.then((resp) => {
 				if (resp?.response?.accessToken) {
