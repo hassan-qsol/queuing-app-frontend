@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Register from "./pages/registration";
 import ProtectedRoute from "./features/protectedRoute";
-import NotFound from "./pages/notFound";
+import NotFound from "./features/notFound";
 import AdminLayout from "./components/layout/admin";
 import CustomerLayout from "./components/layout/customer";
 import ManagerLayout from "./components/layout/manager";
