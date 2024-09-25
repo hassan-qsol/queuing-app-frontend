@@ -37,6 +37,8 @@ const CompaniesList = () => {
 	const handleNavigate = (companyId: number) => {
 		if (loginValue.userType === EUserType.ADMIN)
 			navigate(`/admin/company/${companyId}/services`);
+		else if (loginValue.userType === EUserType.MANAGER)
+			navigate(`/manager/company/${companyId}/services`);
 		else navigate(`/company/${companyId}/services`);
 	};
 

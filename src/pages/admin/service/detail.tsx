@@ -1,5 +1,3 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	Card,
 	CardHeader,
@@ -7,59 +5,64 @@ import {
 	CardContent,
 	CardFooter,
 } from "@/components/ui/card";
-import {
-	Select,
-	SelectTrigger,
-	SelectContent,
-	SelectItem,
-	SelectValue,
-} from "@/components/ui/select";
-import {
-	Form,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	FormField,
-	FormControl,
-} from "@/components/ui/form";
-import { type TicketFormData, TicketSchema } from "./ticketSchema";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import Loader from "@/components/ui/loader";
-import { useFindCollectorsQuery } from "@/api/userApi";
 import { Button } from "@/components/ui/button";
+import { useGenerateTicketMutation } from "@/api/ticketApi";
+import { useToast } from "@/hooks/use-toast";
+import { errorMessageHandling } from "@/common/helpers";
+import { useAppSelector } from "@/redux/hook";
+import type { RootState } from "@/redux/store";
+import { useParams } from "react-router-dom";
+import { EUserType } from "@/common/types";
 
 const ServicesForm = () => {
-	const [isLoading, setIsLoading] = useState(false);
+	const { serviceId } = useParams();
+	const { value: loginValue } = useAppSelector(
+		(state: RootState) => state.login
+	);
 
-	// API ---
-	const { currentData: findCollectorsData, isFetching } =
-		useFindCollectorsQuery(
-			undefined, // No query parameters
-			{
-				refetchOnMountOrArgChange: true, // Options for the query
-			}
-		);
-	const collectors = useMemo(() => {
-		return findCollectorsData?.response?.length
-			? findCollectorsData.response
-			: [];
-	}, [findCollectorsData?.response]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [ticket, setTicket] = useState<undefined | number>();
+	const { toast } = useToast();
+
+	// --- API
+	const [generateTicketMutation, { isLoading: isLoadingGenerateTicket }] =
+		useGenerateTicketMutation();
 
 	useEffect(() => {
-		if (isFetching) {
+		if (isLoadingGenerateTicket) {
 			setIsLoading(true);
 		} else setIsLoading(false);
-	}, [isFetching]);
+	}, [isLoadingGenerateTicket]);
 
-	const form = useForm<TicketFormData>({
-		resolver: zodResolver(TicketSchema),
-		defaultValues: {
-			collectorName: "",
-		},
-	});
-
-	const onSubmit = (values: TicketFormData) => {
-		console.log(values);
+	const generateTicket = async () => {
+		if (loginValue.userType === EUserType.CUSTOMER) {
+			await generateTicketMutation({
+				collectorId: loginValue.id,
+				serviceId: Number(serviceId),
+			})
+				.unwrap()
+				.then((resp) => {
+					toast({
+						title: `You ticket number is: ${resp.response}`,
+					});
+					setTicket(resp.response);
+				})
+				.catch((e: any) => {
+					toast({
+						variant: "destructive",
+						title: "Login failed",
+						description: errorMessageHandling(e),
+					});
+				});
+		} else {
+			toast({
+				variant: "destructive",
+				title: "Operation Failed",
+				description: "This service is only for collectors",
+			});
+		}
 	};
 
 	return (
@@ -68,54 +71,25 @@ const ServicesForm = () => {
 				<Loader />
 			) : (
 				<div className="space-y-4 p-6 bg-white rounded shadow-md">
-					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onSubmit)}>
-							<Card className="w-80 mb-5">
-								<CardHeader>
-									<CardTitle className="text-center">Ticket Number</CardTitle>
-								</CardHeader>
-								<CardContent>
-									<p className="text-center text-2xl font-semibold">12345</p>
-								</CardContent>
-								<CardFooter className="flex justify-center">
-									<Button>Get Ticket</Button>
-								</CardFooter>
-							</Card>
-							{/* Company Name */}
-							<FormField
-								control={form.control}
-								name="collectorName"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel htmlFor="collectorName">Collector</FormLabel>
-										<FormControl>
-											<Select
-												defaultValue=""
-												value={field.value} // set the value from form state
-												onValueChange={field.onChange} // handle change
-											>
-												<SelectTrigger>
-													<SelectValue placeholder="Select a manager" />
-												</SelectTrigger>
-												<SelectContent>
-													{collectors.map((manager) => (
-														<SelectItem key={manager.id} value={manager.id}>
-															{manager.name}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-										</FormControl>
-										{form.formState.errors.collectorName && (
-											<FormMessage>
-												{form.formState.errors.collectorName?.message}
-											</FormMessage>
-										)}
-									</FormItem>
-								)}
-							/>
-						</form>
-					</Form>
+					<Card className="w-80 mb-5 text-center">
+						<CardHeader>
+							<CardTitle className="text-center text-lg font-medium">
+								Ticket Number
+							</CardTitle>
+						</CardHeader>
+						{typeof ticket === "number" && (
+							<CardContent>
+								<p className="text-center text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500 shadow-lg animate-pulse">
+									{ticket}
+								</p>
+							</CardContent>
+						)}
+						<CardFooter className="flex justify-center">
+							<Button type="button" onClick={generateTicket}>
+								Get Ticket
+							</Button>
+						</CardFooter>
+					</Card>
 				</div>
 			)}
 		</>

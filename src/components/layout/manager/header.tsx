@@ -37,9 +37,11 @@ const ManagerHeader = () => {
 						<DropdownMenuItem className="flex items-center space-x-2 p-2 hover:bg-gray-100">
 							<i className="fas fa-user mr-2" /> <span>Profile</span>
 						</DropdownMenuItem>
-						<DropdownMenuItem className="flex items-center space-x-2 p-2 hover:bg-gray-100">
-							<i className="fas fa-sign-out-alt mr-2" onClick={handleLogout} />{" "}
-							<span>Logout</span>
+						<DropdownMenuItem
+							className="flex items-center space-x-2 p-2 hover:bg-gray-100"
+							onClick={handleLogout}
+						>
+							<i className="fas fa-sign-out-alt mr-2" /> <span>Logout</span>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

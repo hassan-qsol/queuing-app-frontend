@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import loginReducer from "./login/loginSlice";
 import { Users } from "@/api/userApi";
 import { Company } from "@/api/companyApi";
+import { Ticket } from "@/api/ticketApi";
 import { Service } from "@/api/serviceApi";
 
 export const store = configureStore({
@@ -10,12 +11,14 @@ export const store = configureStore({
 		[Users.reducerPath]: Users.reducer,
 		[Company.reducerPath]: Company.reducer,
 		[Service.reducerPath]: Service.reducer,
+		[Ticket.reducerPath]: Ticket.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({ serializableCheck: false }).concat(
 			Users.middleware,
 			Company.middleware,
-			Service.middleware
+			Service.middleware,
+			Ticket.middleware,
 		),
 });
 

@@ -62,15 +62,22 @@ export const saveToken = (data: object) => {
 
 export const preloadState = (): ILoginState => {
 	const decryptedData: any = decryption(localStorage.getItem(StorageKey));
-
-	return {
-		id: decryptedData?.id ?? 0,
-		userName: decryptedData?.userName ?? "",
-		email: decryptedData?.email ?? "",
-		fullName: decryptedData?.fullName ?? "",
-		userType: decryptedData?.userType ?? "",
-		accessToken: decryptedData?.accessToken ?? "",
-	};
+	if (decryptedData?.cnic)
+		return {
+			id: decryptedData?.id ?? 0,
+			cnic: decryptedData?.cnic ?? "",
+			userType: decryptedData?.userType ?? "",
+			accessToken: decryptedData?.accessToken ?? "",
+		};
+	else
+		return {
+			id: decryptedData?.id ?? 0,
+			userName: decryptedData?.userName ?? "",
+			email: decryptedData?.email ?? "",
+			fullName: decryptedData?.fullName ?? "",
+			userType: decryptedData?.userType ?? "",
+			accessToken: decryptedData?.accessToken ?? "",
+		};
 };
 
 export const removeToken = () => {

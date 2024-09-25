@@ -6,6 +6,7 @@ import type {
 	ILoginInput,
 	ILoginStateResponse,
 	IFindCollectorsResponse,
+	ICustomerLoginInput
 } from "@/common/types"; // Import setUser action
 
 const { VITE_API_URL } = import.meta.env;
@@ -31,6 +32,13 @@ export const Users = createApi({
 					body: payload,
 				}),
 			}),
+			setLoginCollector: builder.mutation<ILoginStateResponse, ICustomerLoginInput>({
+				query: (payload) => ({
+					url: "/login-collector",
+					method: "POST",
+					body: payload,
+				}),
+			}),
 			findManagers: builder.query<IFindManagersResponse, void>({
 				query: () => `/`,
 			}),
@@ -45,4 +53,6 @@ export const {
 	useSetLoginMutation,
 	useFindManagersQuery,
 	useFindCollectorsQuery,
+	useSetLoginCollectorMutation
+	
 } = Users;

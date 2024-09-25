@@ -1,108 +1,33 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { type LoginSchema, loginSchema } from "./loginSchema"; // Adjust the import path
+import { useState } from "react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import UserLogin from "./userLogin";
+import CollectorLogin from "./collectorLogin";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useSetLoginMutation } from "@/api/userApi";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { login } from "@/redux/login/loginSlice";
-import { useToast } from "@/hooks/use-toast";
-import { errorMessageHandling } from "@/common/helpers";
-
-const Login: React.FC = () => {
-	// Initialize react-hook-form with Zod validation schema
-
-	const [setLogin, { isLoading }] = useSetLoginMutation();
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-	const { toast } = useToast();
-
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<LoginSchema>({
-		resolver: zodResolver(loginSchema),
-	});
-
-	// Handle form submission
-	const onSubmit = async (values: LoginSchema): Promise<void> => {
-		try {
-			await setLogin(values)
-				.unwrap()
-				.then((resp) => {
-					if (resp?.response?.accessToken) {
-						console.log(resp.response);
-						dispatch(login(resp.response));
-						setTimeout(() => {
-							navigate("/");
-						}, 500);
-					} else
-						toast({
-							variant: "destructive",
-							title: "Unable to find Access Token",
-						});
-				})
-				.catch((e: any) => {
-					toast({
-						variant: "destructive",
-						title: "Login failed",
-						description: errorMessageHandling(e),
-					});
-				});
-		} catch (ex: any) {
-			toast({
-				variant: "destructive",
-				title: "Login failed",
-				description: ex?.message,
-			});
-		}
-	};
+const RadioButtonComponent: React.FC = () => {
+	const [isOn, setIsOn] = useState(true);
 
 	return (
-		<form className="max-w-md mx-auto p-4" onSubmit={handleSubmit(onSubmit)}>
-			{/* Email Field */}
-			<div className="mb-4">
-				<Label htmlFor="userName">User Name</Label>
-				<Input
-					id="userName"
-					className={`mt-1 block w-full p-2 border ${
-						errors.userName ? "border-red-500" : "border-gray-300"
-					} rounded-md`}
-					{...register("userName")}
-				/>
-				{errors.userName && (
-					<p className="text-red-500 text-sm">{errors.userName.message}</p>
-				)}
-			</div>
+		<div className="space-y-4">
+			<RadioGroup
+				value={isOn ? "default" : "collector"}
+				onValueChange={(value) => {
+					setIsOn(value === "default");
+				}}
+			>
+				<div className="flex items-center space-x-2">
+					<RadioGroupItem id="r1" value="default" />
+					<Label htmlFor="r1">User</Label>
+				</div>
+				<div className="flex items-center space-x-2">
+					<RadioGroupItem id="r2" value="collector" />
+					<Label htmlFor="r2">Collector</Label>
+				</div>
+			</RadioGroup>
 
-			{/* Password Field */}
-			<div className="mb-4">
-				<Label htmlFor="password">Password</Label>
-				<Input
-					id="password"
-					type="password"
-					className={`mt-1 block w-full p-2 border ${
-						errors.password ? "border-red-500" : "border-gray-300"
-					} rounded-md`}
-					{...register("password")}
-				/>
-				{errors.password && (
-					<p className="text-red-500 text-sm">{errors.password.message}</p>
-				)}
-			</div>
-
-			{/* Submit Button */}
-			<div>
-				<Button disabled={isLoading} type="submit">
-					Sign in
-				</Button>
-			</div>
-		</form>
+			{isOn ? <UserLogin /> : <CollectorLogin />}
+		</div>
 	);
 };
 
-export default Login;
+export default RadioButtonComponent;

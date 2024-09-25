@@ -5,6 +5,7 @@ import type {
 	ICreateServiceResponse,
 	IFindServicesRequest,
 	IFindServicesResponse,
+	IManagerFindServicesResponse
 } from "@/common/types";
 
 const { VITE_API_URL } = import.meta.env;
@@ -37,8 +38,16 @@ export const Service = createApi({
 				query: (queryParams) =>
 					`/?${new URLSearchParams(queryParams as any).toString()}`,
 			}),
+			findManagerServices: builder.query<IManagerFindServicesResponse, void>({
+				query: (queryParams) =>
+					`/manager?${new URLSearchParams(queryParams as any).toString()}`,
+			}),
 		};
 	},
 });
 
-export const { useCreateServiceMutation, useFindServicesQuery } = Service;
+export const {
+	useCreateServiceMutation,
+	useFindServicesQuery,
+	useFindManagerServicesQuery,
+} = Service;

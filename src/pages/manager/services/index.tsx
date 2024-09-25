@@ -1,7 +1,7 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Loader from "@/components/ui/loader";
-import { useFindServicesQuery } from "@/api/serviceApi";
+import { useFindManagerServicesQuery } from "@/api/serviceApi";
 import {
 	Card,
 	CardContent,
@@ -9,42 +9,24 @@ import {
 	CardTitle,
 	CardDescription,
 } from "@/components/ui/card";
-import { useAppSelector } from "@/redux/hook";
-import type { RootState } from "@/redux/store";
-import { EUserType } from "@/common/types";
 
-const ServicesList = () => {
-	const { companyId } = useParams();
-	const { value: loginValue } = useAppSelector(
-		(state: RootState) => state.login
-	);
+
+const Manager = () => {
 	const navigate = useNavigate();
 
 	const [isLoading, setIsLoading] = useState(false);
 
 	// API ---
-	const { currentData: findServicesData, isFetching } = useFindServicesQuery(
-		{
-			companyId: Number(companyId),
-		},
-		{
+	const { currentData: findServicesData, isFetching } =
+		useFindManagerServicesQuery(undefined, {
 			refetchOnMountOrArgChange: true, // Options for the query
-		}
-	);
+		});
 
 	useEffect(() => {
 		if (isFetching) {
 			setIsLoading(true);
 		} else setIsLoading(false);
 	}, [isFetching]);
-
-	const handleNavigate = (serviceId: number) => {
-		if (loginValue.userType === EUserType.ADMIN)
-			navigate(`/admin/company/${companyId}/services/${serviceId}`);
-		if (loginValue.userType === EUserType.MANAGER)
-			navigate(`/manager/company/${companyId}/services/${serviceId}`);
-		else navigate(`/company/${companyId}/services/${serviceId}`);
-	};
 
 	return (
 		<>
@@ -58,7 +40,9 @@ const ServicesList = () => {
 								key={service.id}
 								className="w-64"
 								onClick={() => {
-									handleNavigate(service.id);
+									navigate(
+										`/manager/company/${service.companyId}/services/${service.id}`
+									);
 								}}
 							>
 								<CardHeader>
@@ -80,4 +64,4 @@ const ServicesList = () => {
 	);
 };
 
-export default ServicesList;
+export default Manager;

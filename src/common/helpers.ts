@@ -1,6 +1,7 @@
 import type { IErrorResponse, IFetchError } from "./types";
 
 export const handleLogout = () => {
+	console.log('ok')
 	localStorage.removeItem("app-login-session");
 	window.location.href = `/`;
 };
