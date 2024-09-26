@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
 
 # Editor directories and files
 .vscode/*
@@ -32,3 +33,6 @@ storybook-static
 
 # tests
 /coverage/
+
+# enviroment variables
+.env

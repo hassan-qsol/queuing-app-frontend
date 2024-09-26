@@ -4,7 +4,7 @@ import { type CollectorSchema, collectorSchema } from "./collectorSchema"; // Ad
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useSetLoginCollectorMutation } from "@/api/userApi";
+import { useSetLoginCollectorMutation } from "@/api/collectorApi";
 import { useDispatch } from "react-redux";
 import { login } from "@/redux/login/loginSlice";
 import { useToast } from "@/hooks/use-toast";

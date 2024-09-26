@@ -88,7 +88,7 @@ export interface IFindCollectorsResponse extends ResponseObject {
 
 // --- COLLECTOR
 
-export interface ICustomerLoginInput {
+export interface ICollectorLoginInput {
 	cnic: string;
 }
 

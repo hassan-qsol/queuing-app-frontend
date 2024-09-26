@@ -1,40 +1,42 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "@/redux/store";
 import type {
-	IFindManagersResponse,
-	ILoginInput,
 	ILoginStateResponse,
+	IFindCollectorsResponse,
+	ICollectorLoginInput,
 } from "@/common/types"; // Import setUser action
 
 const { VITE_API_URL } = import.meta.env;
 
-export const Users = createApi({
-	reducerPath: "api/users",
+export const Collector = createApi({
+	reducerPath: "api/collectors",
 	baseQuery: fetchBaseQuery({
-		baseUrl: VITE_API_URL + "/users",
+		baseUrl: VITE_API_URL + "/collectors",
 		prepareHeaders: (headers, { getState }) => {
 			const token: string = (getState() as RootState).login.value.accessToken;
 			if (token) headers.set("Authorization", `Bearer ${token}`);
 			return headers;
 		},
 	}),
-	tagTypes: ["users"],
+	tagTypes: ["collectors"],
 	endpoints(builder) {
 		return {
-			// Login mutation
-			setLogin: builder.mutation<ILoginStateResponse, ILoginInput>({
+			setLoginCollector: builder.mutation<
+				ILoginStateResponse,
+				ICollectorLoginInput
+			>({
 				query: (payload) => ({
-					url: "/login",
+					url: "/",
 					method: "POST",
 					body: payload,
 				}),
 			}),
-
-			findManagers: builder.query<IFindManagersResponse, void>({
+			findCollectors: builder.query<IFindCollectorsResponse, void>({
 				query: () => `/`,
 			}),
 		};
 	},
 });
 
-export const { useSetLoginMutation, useFindManagersQuery } = Users;
+export const { useFindCollectorsQuery, useSetLoginCollectorMutation } =
+	Collector;
